@@ -5,12 +5,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.os.IBinder;
 
 import me.echeung.listenmoeapi.APIClient;
 import me.echeung.listenmoeapi.auth.AndroidAuthUtil;
 import me.echeung.listenmoeapi.auth.AuthUtil;
 import me.echeung.moemoekyun.service.RadioService;
+import me.echeung.moemoekyun.utils.LocaleUtil;
 import me.echeung.moemoekyun.utils.PreferenceUtil;
 import me.echeung.moemoekyun.viewmodels.RadioViewModel;
 import me.echeung.moemoekyun.viewmodels.SearchViewModel;
@@ -48,6 +50,12 @@ public class App extends Application implements ServiceConnection {
 
         // Preferences
         preferenceUtil = new PreferenceUtil(this);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleUtil.setLocale(this);
     }
 
     public static APIClient getApiClient() {
