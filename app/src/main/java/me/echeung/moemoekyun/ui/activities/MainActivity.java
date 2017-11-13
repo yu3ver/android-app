@@ -24,6 +24,7 @@ import me.echeung.moemoekyun.databinding.ActivityMainBinding;
 import me.echeung.moemoekyun.service.RadioService;
 import me.echeung.moemoekyun.ui.dialogs.LoginDialog;
 import me.echeung.moemoekyun.ui.dialogs.SleepTimerDialog;
+import me.echeung.moemoekyun.utils.LocaleUtil;
 import me.echeung.moemoekyun.utils.NetworkUtil;
 import me.echeung.moemoekyun.utils.UrlUtil;
 
@@ -40,6 +41,8 @@ public class MainActivity extends BaseActivity {
 
     private BroadcastReceiver intentReceiver;
     private boolean receiverRegistered = false;
+
+    private String locale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +72,24 @@ public class MainActivity extends BaseActivity {
         // Handle intent actions
         initBroadcastReceiver();
         handleIntentAction(getIntent());
+
+        locale = LocaleUtil.getLocale(getBaseContext()).getLanguage();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntentAction(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Recreate on locale change
+        final String currentLocale = App.getPreferenceUtil().getLanguage();
+        if (!locale.equalsIgnoreCase(currentLocale)) {
+            runOnUiThread(this::recreate);
+        }
     }
 
     @Override

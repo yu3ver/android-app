@@ -223,7 +223,9 @@ public class UserFragment extends Fragment implements SongAdapter.OnSongItemClic
             public void onSuccess(final UserFavoritesResponse userFavorites) {
                 final List<Song> favorites = userFavorites.getSongs();
 
-                getActivity().runOnUiThread(() -> adapter.setSongs(favorites));
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> adapter.setSongs(favorites));
+                }
 
                 viewModel.setUserRequests(userFavorites.getExtra().getRequests());
                 viewModel.setHasFavorites(!favorites.isEmpty());
